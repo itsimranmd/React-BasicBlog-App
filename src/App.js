@@ -1,18 +1,28 @@
 import React from "react";
 import "./styles.css";
-import { Button } from "reactstrap";
 import Header from "./Components/Header";
-import { Route, Switch } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import routes from "./routes/routes";
-import Home from "./Pages/Home";
+import Home from "./pages/Home";
+import PostPage from "./pages/PostPage";
 
 export default function App() {
   return (
     <div className="App">
       <Header />
       <Switch>
-        <Route path={routes.home} />
-        <Home />
+        <Route path={routes.home}>
+          <Home />
+        </Route>
+        <Route path={routes.authors}>
+          <h3>Authors</h3>
+        </Route>
+        <Route path={routes.newPost}>
+          <h3>New Post!</h3>
+        </Route>
+        <Route path={routes.post}>
+          <PostPage />
+        </Route>
       </Switch>
     </div>
   );

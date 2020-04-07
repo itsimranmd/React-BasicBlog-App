@@ -6,9 +6,10 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   NavbarText
 } from "reactstrap";
+import { NavLink } from "react-router-dom";
+import routes from "../routes/routes";
 
 const Header = ({}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,19 +24,37 @@ const Header = ({}) => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/home/">Home</NavLink>
+              <NavLink
+                className={"nav-link"}
+                activeClassName={"active"}
+                to={routes.home}
+              >
+                Home
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">
+              <NavLink
+                className={"nav-link"}
+                activeClassName={"active"}
+                to={routes.authors}
+              >
                 Authors
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink
+                className={"nav-link"}
+                activeClassName={"active"}
+                to={routes.newPost}
+              >
+                New Post
+              </NavLink>
+            </NavItem>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
+          <NavbarText>About</NavbarText>
         </Collapse>
       </Navbar>
     </div>
   );
 };
-
 export default Header;
