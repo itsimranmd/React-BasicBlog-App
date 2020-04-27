@@ -1,18 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormGroup, Label, Input, Form, Button } from "reactstrap";
 
 const NewPost = () => {
-  const [authorName, setAuthorName] = useState("");
+  const [authorId, setAuthorId] = useState("");
   const [postText, setPostText] = useState("");
   const [postTitle, setPostTitle] = useState("");
 
-  const onAuthorNameChange = event => setAuthorName(event.target.value);
+  const [authorsList, setAuthorsList] = useState([]);
+
+  const onAuthorNameChange = event => setAuthorId(event.target.value);
   const onPostTextChange = event => setPostText(event.target.value);
   const onPostTitleChange = event => setPostTitle(event.target.value);
 
-  const submitForm = event => {
+  useEffect(() => {
+    fetch("https://ts5uf.sse.codesandbox.io/authors")
+      .then(response => response.json())
+      .then(data => {
+        setAuthorsList(data.authors);
+      })
+      .catch(console.error);
+  }, []);
+
+  const submitForm = async event => {
     event.preventDefault();
-    console.log(authorName, postText, postTitle);
+    const postData = {
+      title: postTitle,
+      content: postText,
+      author: authorId
+    };
+    const response = await fetch("https://b31ic.sse.codesandbox.io/posts", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(postData)
+    });
+    const data = await response.json();
+    console.log(data);
   };
 
   return (
@@ -32,14 +57,22 @@ const NewPost = () => {
 
         <FormGroup>
           <Label for="authorName">Author Name</Label>
+
           <Input
-            type="text"
-            name="author name"
             id="authorName"
-            placeholder="Author's Name..."
-            value={authorName}
+            type="select"
+            value={authorId}
             onChange={onAuthorNameChange}
-          />
+          >
+            {" "}
+            {authorsList.map(author => {
+              return (
+                <option key={author._id} value={author._id}>
+                  {author.name}
+                </option>
+              );
+            })}
+          </Input>
         </FormGroup>
 
         <FormGroup>
