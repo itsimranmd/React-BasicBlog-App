@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FormGroup, Label, Input, Form, Button } from "reactstrap";
+import useAdminProvider from "../store/AdminProvider/useAdminProvider";
+import { useHistory } from "react-router-dom";
+import routes from "../routes/routes";
 
 const NewPost = () => {
   const [authorId, setAuthorId] = useState("");
   const [postText, setPostText] = useState("");
   const [postTitle, setPostTitle] = useState("");
+
 
   const [authorsList, setAuthorsList] = useState([]);
 
@@ -13,31 +17,18 @@ const NewPost = () => {
   const onPostTitleChange = event => setPostTitle(event.target.value);
 
   useEffect(() => {
-    fetch("https://ts5uf.sse.codesandbox.io/authors")
+
       .then(response => response.json())
       .then(data => {
         setAuthorsList(data.authors);
       })
       .catch(console.error);
+
   }, []);
 
   const submitForm = async event => {
     event.preventDefault();
-    const postData = {
-      title: postTitle,
-      content: postText,
-      author: authorId
-    };
-    const response = await fetch("https://b31ic.sse.codesandbox.io/posts", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(postData)
-    });
-    const data = await response.json();
-    console.log(data);
+
   };
 
   return (

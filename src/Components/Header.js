@@ -3,23 +3,32 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
-  NavbarText
+  Button
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import routes from "../routes/routes";
+import useAdminProvider from "../store/AdminProvider/useAdminProvider";
 
 const Header = ({}) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { isAdminLoggedIn } = useAdminProvider();
+
   const toggle = () => setIsOpen(!isOpen);
+
+  const logout = () => {
+    window.localStorage.removeItem("jwtToken");
+    window.location.reload();
+  };
 
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Blog</NavbarBrand>
+        <NavLink className={"navbar-brand"} to={routes.home}>
+          Blog
+        </NavLink>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -41,17 +50,29 @@ const Header = ({}) => {
                 Authors
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink
-                className={"nav-link"}
-                activeClassName={"active"}
-                to={routes.newPost}
-              >
-                New Post
-              </NavLink>
-            </NavItem>
+            {isAdminLoggedIn ? (
+              <NavItem>
+                <NavLink
+                  className={"nav-link"}
+                  activeClassName={"active"}
+                  to={routes.newPost}
+                >
+                  New Post
+                </NavLink>
+              </NavItem>
+            ) : null}
           </Nav>
-          <NavbarText>About</NavbarText>
+          {isAdminLoggedIn ? (
+            <Button onClick={logout}>Logout</Button>
+          ) : (
+            <NavLink
+              activeClassName="active"
+              className="nav-link"
+              to={routes.adminLogin}
+            >
+              Login
+            </NavLink>
+          )}
         </Collapse>
       </Navbar>
     </div>
