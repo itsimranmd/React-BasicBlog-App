@@ -38,7 +38,7 @@ export default function App() {
           </ErrorBoundary>
         </Route>
         <Route path={routes.authors}>
-          <h3>Author's page coming soon.</h3>
+          <h3>Authors</h3>
         </Route>
         <Route path={routes.newPost}>
           <NewPost />
