@@ -9,7 +9,7 @@ import NewPost from "./pages/NewPost";
 import ErrorBoundary from "./Components/ErrorBoundary";
 import useAdminProvider from "./store/AdminProvider/useAdminProvider";
 import LoginPage from "./pages/LoginPage";
-import adminRequests from "./services/adminRequests";
+// import adminRequests from "./services/adminRequests";
 
 export default function App() {
   const history = useHistory();
@@ -38,7 +38,7 @@ export default function App() {
           </ErrorBoundary>
         </Route>
         <Route path={routes.authors}>
-          <h3>Author's page coming soon.</h3>
+          <h3>Author's page coming soon!!</h3>
         </Route>
         <Route path={routes.newPost}>
           <NewPost />
