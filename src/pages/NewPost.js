@@ -1,18 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormGroup, Label, Input, Form, Button } from "reactstrap";
+import useAdminProvider from "../store/AdminProvider/useAdminProvider";
+import { useHistory } from "react-router-dom";
+import routes from "../routes/routes";
 
 const NewPost = () => {
-  const [authorName, setAuthorName] = useState("");
+  const [authorId, setAuthorId] = useState("");
   const [postText, setPostText] = useState("");
   const [postTitle, setPostTitle] = useState("");
 
-  const onAuthorNameChange = event => setAuthorName(event.target.value);
+  const history = useHistory();
+
+  const { isAdminLoggedIn } = useAdminProvider();
+
+  const [authorsList, setAuthorsList] = useState([]);
+
+  const onAuthorNameChange = event => setAuthorId(event.target.value);
   const onPostTextChange = event => setPostText(event.target.value);
   const onPostTitleChange = event => setPostTitle(event.target.value);
 
-  const submitForm = event => {
+  useEffect(() => {
+    fetch("https://ei0ci.sse.codesandbox.io/authors")
+      .then(response => response.json())
+      .then(data => {
+        setAuthorsList(data.authors);
+      })
+      .catch(console.error);
+
+    if (!isAdminLoggedIn) {
+      history.push(routes.home);
+    }
+  }, []);
+
+  const submitForm = async event => {
     event.preventDefault();
-    console.log(authorName, postText, postTitle);
+    try {
+      const postData = {
+        title: postTitle,
+        content: postText,
+        author: authorId
+      };
+      const response = await fetch("https://ei0ci.sse.codesandbox.io/posts", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(postData)
+      });
+      const data = await response.json();
+      if (data.status === "SUCCESS") {
+        alert("New post has been created!");
+      } else {
+        console.error(data);
+        alert("Unable to submit form!");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Unable to submit form!");
+    }
   };
 
   return (
@@ -32,14 +78,22 @@ const NewPost = () => {
 
         <FormGroup>
           <Label for="authorName">Author Name</Label>
+
           <Input
-            type="text"
-            name="author name"
             id="authorName"
-            placeholder="Author's Name..."
-            value={authorName}
+            type="select"
+            value={authorId}
             onChange={onAuthorNameChange}
-          />
+          >
+            {" "}
+            {authorsList.map(author => {
+              return (
+                <option key={author._id} value={author._id}>
+                  {author.name}
+                </option>
+              );
+            })}
+          </Input>
         </FormGroup>
 
         <FormGroup>

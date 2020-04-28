@@ -4,7 +4,7 @@ const routes = {
   author: "/author/:id",
   post: "/post/:id",
   newPost: "/post/add-new",
-  adminLogin: "/Login"
+  adminLogin: "/login"
 };
 
 export default routes;
