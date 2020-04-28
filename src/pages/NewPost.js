@@ -9,9 +9,6 @@ const NewPost = () => {
   const [postText, setPostText] = useState("");
   const [postTitle, setPostTitle] = useState("");
 
-  const history = useHistory();
-
-  const { isAdminLoggedIn } = useAdminProvider();
 
   const [authorsList, setAuthorsList] = useState([]);
 
@@ -20,45 +17,18 @@ const NewPost = () => {
   const onPostTitleChange = event => setPostTitle(event.target.value);
 
   useEffect(() => {
-    fetch("https://ei0ci.sse.codesandbox.io/authors")
+
       .then(response => response.json())
       .then(data => {
         setAuthorsList(data.authors);
       })
       .catch(console.error);
 
-    if (!isAdminLoggedIn) {
-      history.push(routes.home);
-    }
   }, []);
 
   const submitForm = async event => {
     event.preventDefault();
-    try {
-      const postData = {
-        title: postTitle,
-        content: postText,
-        author: authorId
-      };
-      const response = await fetch("https://ei0ci.sse.codesandbox.io/posts", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(postData)
-      });
-      const data = await response.json();
-      if (data.status === "SUCCESS") {
-        alert("New post has been created!");
-      } else {
-        console.error(data);
-        alert("Unable to submit form!");
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Unable to submit form!");
-    }
+
   };
 
   return (

@@ -7,9 +7,7 @@ import Home from "./pages/Home";
 import PostPage from "./pages/PostPage";
 import NewPost from "./pages/NewPost";
 import ErrorBoundary from "./Components/ErrorBoundary";
-import useAdminProvider from "./store/AdminProvider/useAdminProvider";
-import LoginPage from "./pages/LoginPage";
-// import adminRequests from "./services/adminRequests";
+
 
 export default function App() {
   const history = useHistory();
